@@ -67,41 +67,70 @@ class Field extends ActiveRecord
     }
 
     /**
+     * @var \abcms\library\fields\Field
+     */
+    private $_inputObject = null;
+
+    /**
      * Returns input object
      * @param ActiveRecord $model
      * @return \abcms\library\fields\Field
      */
     protected function getInputObject()
     {
-        $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
-        $inputName = "field[$this->id]";
-        $label = Inflector::camel2words($this->name);
-        $value = $this->value;
-        $field = Yii::createObject([
-                    'class' => $class,
-                    'inputName' => $inputName,
-                    'label' => $label,
-                    'value' => $value,
-        ]);
-        return $field;
+        if(!$this->_inputObject) {
+            $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
+            $inputName = "field[$this->id]";
+            $label = Inflector::camel2words($this->name);
+            $value = $this->value;
+            $field = Yii::createObject([
+                        'class' => $class,
+                        'inputName' => $inputName,
+                        'label' => $label,
+                        'value' => $value,
+            ]);
+            $this->_inputObject = $field;
+        }
+        return $this->_inputObject;
     }
-    
+
     /**
      * Render the full field
      * @return string
      */
-    public function renderField(){
+    public function renderField()
+    {
         $input = $this->getInputObject();
         return $input->renderField();
     }
-    
+
     /**
      * Get array that can be used in detail view widget 'attributes' property
      * @return array
      */
-    public function getDetailViewAttribute(){
+    public function getDetailViewAttribute()
+    {
         $input = $this->getInputObject();
         return $input->detailViewAttribute();
+    }
+    
+    /**
+     * Get the value of the input object.
+     * @return mixed
+     */
+    public function getInputValue(){
+        $input = $this->getInputObject();
+        return $input->value;
+    }
+
+    /**
+     * Validate input object value
+     * @return boolean
+     */
+    public function validateInput()
+    {
+        $input = $this->getInputObject();
+        return $input->validate();
     }
 
     /**
@@ -130,18 +159,23 @@ class Field extends ActiveRecord
     public function commitValue($value, $modelId, $pk)
     {
         if($this->canSaveForModel($modelId, $pk)) {
+            $alreadyAvailable = true;
             $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
-            if(!$meta && !$value) { // If meta doesn't exist and value is empty no need to create a new one
-                return false;
-            }
             if(!$meta) { // Create new meta if it doesn't exist
+                $alreadyAvailable = false;
                 $meta = new Meta();
                 $meta->fieldId = $this->id;
                 $meta->modelId = $modelId;
                 $meta->pk = $pk;
             }
-            $meta->value = $value;
-            return $meta->save(false);
+            $this->value = $value;
+            if($this->validateInput()) {
+                $meta->value = $this->getInputValue();
+                if(!$alreadyAvailable && !$meta->value){ // No need to create new meta if value is empty
+                    return false;
+                }
+                return $meta->save(false);
+            }
         }
         return false;
     }
@@ -155,7 +189,7 @@ class Field extends ActiveRecord
     public function fillValue($modelId, $pk)
     {
         $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
-        if($meta){
+        if($meta) {
             $this->value = $meta->value;
             return true;
         }
