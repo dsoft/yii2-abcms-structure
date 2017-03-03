@@ -13,6 +13,7 @@ use yii\helpers\Inflector;
  * @property integer $structureId
  * @property string $name
  * @property string $type
+ * @property integer $ordering
  */
 class Field extends ActiveRecord
 {
@@ -52,6 +53,7 @@ class Field extends ActiveRecord
             'structureId' => 'Structure ID',
             'name' => 'Name',
             'type' => 'Type',
+            'ordering' => 'Ordering',
         ];
     }
 

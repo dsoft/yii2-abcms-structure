@@ -1,4 +1,5 @@
 <?php
+namespace abcms\structure\migrations;
 
 use yii\db\Migration;
 
@@ -17,6 +18,7 @@ class m170301_171439_create_structure_field_table extends Migration
             'structureId' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
             'type' => $this->string()->notNull(),
+            'ordering' => $this->integer()->notNull()->defaultValue(1),
         ]);
     }
 

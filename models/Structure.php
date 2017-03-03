@@ -56,7 +56,7 @@ class Structure extends ActiveRecord
      */
     public function getFields()
     {
-        return $this->hasMany(Field::className(), ['structureId' => 'id']);
+        return $this->hasMany(Field::className(), ['structureId' => 'id'])->orderBy(['ordering' => SORT_ASC]);
     }
 
     /**
@@ -77,15 +77,16 @@ class Structure extends ActiveRecord
             }
         }
     }
-    
+
     /**
      * Fill value for each field.
      * @param int $modelId
      * @param int $pk
      */
-    public function fillFieldsValues($modelId, $pk){
+    public function fillFieldsValues($modelId, $pk)
+    {
         $fields = $this->fields;
-        foreach($fields as $field){
+        foreach($fields as $field) {
             $field->fillValue($modelId, $pk);
         }
     }

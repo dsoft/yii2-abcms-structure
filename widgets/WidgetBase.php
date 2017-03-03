@@ -6,7 +6,6 @@ use Yii;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
 use abcms\structure\models\Structure;
-use abcms\structure\models\Meta;
 
 class WidgetBase extends Widget
 {
