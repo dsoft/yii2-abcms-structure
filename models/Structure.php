@@ -4,7 +4,6 @@ namespace abcms\structure\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use abcms\library\models\Model;
 
 /**
  * This is the model class for table "structure".
@@ -89,6 +88,24 @@ class Structure extends ActiveRecord
         foreach($fields as $field) {
             $field->fillValue($modelId, $pk);
         }
+    }
+
+    /**
+     * Returns custom fields for a certain model
+     * @param int $modelId Model class identifier
+     * @param int $pk Primary key of the model
+     * @return array
+     */
+    public static function getCustomFields($modelId, $pk)
+    {
+        $metas = Meta::find()->joinWith(['field', 'field.structure'], true, 'INNER JOIN')->andWhere(['structure_field_meta.modelId' => $modelId, 'structure_field_meta.pk' => $pk])->all();
+        $array = [];
+        foreach($metas as $meta){
+            if($meta->value){
+                $array[$meta->field->structure->name][$meta->field->name] = $meta->value; 
+            }
+        }
+        return $array;
     }
 
 }

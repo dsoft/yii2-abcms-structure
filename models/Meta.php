@@ -49,4 +49,13 @@ class Meta extends \yii\db\ActiveRecord
             'value' => 'Value',
         ];
     }
+    
+    /**
+     * Get Field model that this field belongs to
+     * @return mixed
+     */
+    public function getField()
+    {
+        return $this->hasOne(Field::className(), ['id' => 'fieldId']);
+    }
 }

@@ -47,5 +47,18 @@ class CustomFieldsBehavior extends \yii\base\Behavior
         }
         return $this->_modelId;
     }
+    
+    /**
+     * Get custom fields of the owner 
+     * @return array
+     */
+    public function getCustomFields()
+    {
+        $model = $this->owner;
+        $modelId = $this->returnModelId();
+        $pk = $model->id;
+        $fields = Structure::getCustomFields($modelId, $pk);
+        return $fields;
+    }
 
 }
