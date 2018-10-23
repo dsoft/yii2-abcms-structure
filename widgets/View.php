@@ -21,6 +21,9 @@ class View extends WidgetBase
      */
     public function run()
     {
+        if(!$this->structure){
+            return;
+        }
         $fields = $this->structure->fields;
         $attributes = [];
         foreach($fields as $field) {

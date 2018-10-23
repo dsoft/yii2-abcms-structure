@@ -40,15 +40,14 @@ class WidgetBase extends Widget
         }
         if(is_array($this->structure)) {
             $structure = Structure::findOne($this->structure);
-            if(!$structure) {
-                throw new InvalidConfigException('Unable to find the structure with the provided "structure" property array.');
-            }
-            $this->structure = $structure;
+            $this->structure = $structure ? $structure : null;
         }
        if(!$this->model->hasMethod('returnModelId')) {
             throw new InvalidConfigException('"model" should implement the custom fields behavior: '.\abcms\structure\behaviors\CustomFieldsBehavior::className());
         }
-        $this->structure->fillFieldsValues($this->model->returnModelId(), $this->model->id);
+        if($structure){
+            $this->structure->fillFieldsValues($this->model->returnModelId(), $this->model->id);
+        }
         parent::init();
     }
 

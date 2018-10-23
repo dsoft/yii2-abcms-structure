@@ -146,6 +146,12 @@ class Field extends ActiveRecord
         if($structure->modelId === null && $structure->pk === null) { // If general structure like 'seo'
             return true;
         }
+        if($structure->modelId === $modelId && $structure->pk === null){ // If class specific structure
+            return true;
+        }
+        if($structure->modelId === $modelId && $structure->pk === $pk){ // If model specific structure
+            return true;
+        }
         return false;
     }
 

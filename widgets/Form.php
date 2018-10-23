@@ -22,6 +22,9 @@ class Form extends WidgetBase
     public function run()
     {
         $structure = $this->structure;
+        if(!$structure){
+            return;
+        }
         $fields = $structure->fields;
         if($fields) {
             return $this->render('form', [
@@ -37,10 +40,12 @@ class Form extends WidgetBase
      * @param array $data key:field id, value: field value
      */
     protected function fillFieldsValues($data){
-        $fields = $this->structure->fields;
-        foreach($fields as $field){
-            if(isset($data[$field->id])){
-                $field->value = $data[$field->id];
+        if($this->structure){
+            $fields = $this->structure->fields;
+            foreach($fields as $field){
+                if(isset($data[$field->id])){
+                    $field->value = $data[$field->id];
+                }
             }
         }
     }
