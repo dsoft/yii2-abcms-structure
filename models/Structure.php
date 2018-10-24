@@ -102,7 +102,13 @@ class Structure extends ActiveRecord
         $array = [];
         foreach($metas as $meta){
             if($meta->value){
-                $array[$meta->field->structure->name][$meta->field->name] = $meta->value; 
+                if($meta->field->structure->name){
+                    $array[$meta->field->structure->name][$meta->field->name] = $meta->value; 
+                }
+                else{
+                    $array[$meta->field->name] = $meta->value; 
+                }
+                
             }
         }
         return $array;
