@@ -111,7 +111,7 @@ class Field extends ActiveRecord
     public function getDetailViewAttribute()
     {
         $input = $this->getInputObject();
-        return $input->detailViewAttribute();
+        return $input->getDetailViewAttribute();
     }
     
     /**

@@ -71,12 +71,18 @@ class CustomFieldsBehavior extends \yii\base\Behavior
     /**
      * Return a specific custom field
      * @param string $field
+     * @param string|null $structureName Use it if you want to get the custom field from a certain structure
      * @return string|null
      */
-    public function getCustomField($field)
+    public function getCustomField($field, $structureName = null)
     {
         $fields = $this->getCustomFields();
-        return isset($fields[$field]) ? $fields[$field] : null;
+        if($structureName){
+            return isset($fields[$structureName][$field]) ? $fields[$structureName][$field] : null;
+        }
+        else{
+            return isset($fields[$field]) ? $fields[$field] : null;
+        }
     }
 
 }

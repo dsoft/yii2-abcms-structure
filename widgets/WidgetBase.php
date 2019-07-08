@@ -45,7 +45,7 @@ class WidgetBase extends Widget
        if(!$this->model->hasMethod('returnModelId')) {
             throw new InvalidConfigException('"model" should implement the custom fields behavior: '.\abcms\structure\behaviors\CustomFieldsBehavior::className());
         }
-        if($structure){
+        if($this->structure){
             $this->structure->fillFieldsValues($this->model->returnModelId(), $this->model->id);
         }
         parent::init();
