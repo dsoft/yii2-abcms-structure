@@ -37,8 +37,7 @@ class Field extends ActiveRecord
     public function rules()
     {
         return [
-            [['structureId', 'name', 'type'], 'required'],
-            [['structureId'], 'integer'],
+            [['name', 'type'], 'required'],
             [['name', 'type'], 'string', 'max' => 255],
         ];
     }
@@ -50,7 +49,7 @@ class Field extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'structureId' => 'Structure ID',
+            'structureId' => 'Structure',
             'name' => 'Name',
             'type' => 'Type',
             'ordering' => 'Ordering',
