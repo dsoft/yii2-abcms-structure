@@ -48,6 +48,18 @@ class Structure extends ActiveRecord
             'pk' => 'PK',
         ];
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => \abcms\structure\behaviors\CustomFieldsBehavior::className(),
+            ],
+        ]);
+    }
 
     /**
      * Get Fields models that belongs to this model
@@ -64,7 +76,7 @@ class Structure extends ActiveRecord
      * @param int $pk Primary key of the model
      * @param array $data Array where key is the field id and value is the field value.
      */
-    public static function saveCustomFields($modelId, $pk, $data)
+    public static function saveFieldsMeta($modelId, $pk, $data)
     {
         if(!is_array($data) || !$data) {
             return;
