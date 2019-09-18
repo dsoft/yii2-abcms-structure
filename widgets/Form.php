@@ -3,9 +3,16 @@
 namespace abcms\structure\widgets;
 
 use Yii;
+use yii\base\InvalidConfigException;
 
 class Form extends WidgetBase
 {
+    
+    /**
+     * ActiveForm that the active fields belongs to
+     * @var \yii\widgets\ActiveForm
+     */
+    public $form;
 
     /**
      * @inheritdoc
@@ -13,6 +20,9 @@ class Form extends WidgetBase
     public function init()
     {
         parent::init();
+        if(!$this->form) {
+            throw new InvalidConfigException('"form" property must be set.');
+        }
         $this->fillFieldsValues(Yii::$app->request->post('field'));
     }
 
@@ -25,12 +35,15 @@ class Form extends WidgetBase
         if(!$structure){
             return;
         }
+        $dynamicModel = $structure->getDynamicModel();
         $fields = $structure->fields;
         if($fields) {
             return $this->render('form', [
                 'title' => $this->title,
                 'fields' => $fields,
                 'model' => $this->model,
+                'dynamicModel' => $dynamicModel,
+                'form' => $this->form,
             ]);
         }
     }

@@ -5,6 +5,7 @@ namespace abcms\structure\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Inflector;
+use yii\base\DynamicModel;
 
 /**
  * This is the model class for table "structure_field".
@@ -13,6 +14,7 @@ use yii\helpers\Inflector;
  * @property integer $structureId
  * @property string $name
  * @property string $type
+ * @property integer $isRequired
  * @property integer $ordering
  */
 class Field extends ActiveRecord
@@ -38,6 +40,7 @@ class Field extends ActiveRecord
     {
         return [
             [['name', 'type'], 'required'],
+            [['active'], 'integer'],
             [['name', 'type'], 'string', 'max' => 255],
         ];
     }
@@ -52,6 +55,7 @@ class Field extends ActiveRecord
             'structureId' => 'Structure',
             'name' => 'Name',
             'type' => 'Type',
+            'isRequired' => 'Is Required',
             'ordering' => 'Ordering',
         ];
     }
@@ -104,6 +108,17 @@ class Field extends ActiveRecord
     }
 
     /**
+     * Returns the active field
+     * @param \yii\widgets\ActiveField $activeField ActiveField Object
+     * @return \yii\widgets\ActiveField|string
+     */
+    public function renderActiveField($activeField)
+    {
+        $input = $this->getInputObject();
+        return $input->renderActiveField($activeField);
+    }
+    
+    /**
      * Get array that can be used in detail view widget 'attributes' property
      * @return array
      */
@@ -130,6 +145,35 @@ class Field extends ActiveRecord
     {
         $input = $this->getInputObject();
         return $input->validate();
+    }
+    
+    /**
+     * Add custom validation rules to the provided model
+     * @param \yii\base\DynamicModel $model
+     */
+    public function addRulesToModel($model)
+    {
+        $input = $this->getInputObject();
+        return $input->addRulesToModel($model);
+    }
+    
+    /**
+     * Return if field is safe for mass assignment
+     * @return boolean
+     */
+    public function isSafe()
+    {
+        $input = $this->getInputObject();
+        return $input->isSafe();
+    }
+    
+    /**
+     * Returns if current field is required
+     * @return boolean
+     */
+    public function isRequired()
+    {
+        return $this->isRequired;
     }
 
     /**
@@ -199,6 +243,37 @@ class Field extends ActiveRecord
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Creates a dynamic model for the provided fields and returns it.
+     * @param Field[] $fields
+     * @return DynamicModel
+     */
+    public static function getDynamicModel($fields)
+    {
+        $attributesNames = [];
+        $requiredAttributes = [];
+        $safeAttributes = [];
+        foreach($fields as $field)
+        {
+            $attributesNames[] = $field->name;
+            if($field->isSafe()){
+                $safeAttributes[] = $field->name;
+                if($field->isRequired()){
+                    $requiredAttributes[] = $field->name;
+                }
+            }
+        }
+        $model = new DynamicModel($attributesNames);
+        $model->addRule($safeAttributes, 'safe');
+        if($requiredAttributes){
+            $model->addRule($requiredAttributes, 'required', ['message' => Yii::t('app', 'This field cannot be left empty')]);
+        }
+        foreach($fields as $field){
+            $field->addRulesToModel($model);
+        }
+        return $model;
     }
 
 }

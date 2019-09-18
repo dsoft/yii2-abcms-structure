@@ -125,5 +125,16 @@ class Structure extends ActiveRecord
         }
         return $array;
     }
+    
+    /**
+     * Creates a dynamic model for this structure fields.
+     * @return \yii\base\DynamicModel
+     */
+    public function getDynamicModel()
+    {
+        $fields = $this->fields;
+        $model = Field::getDynamicModel($fields);
+        return $model;
+    }
 
 }
