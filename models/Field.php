@@ -183,6 +183,16 @@ class Field extends ActiveRecord
     }
     
     /**
+     * Return if field has multiple answers like a multi choice select box
+     * @return boolean
+     */
+    public function hasMultipleAnswers()
+    {
+        $input = $this->getInputObject();
+        return $input->hasMultipleAnswers();
+    }
+    
+    /**
      * Returns if current field is required
      * @return boolean
      */
@@ -223,25 +233,66 @@ class Field extends ActiveRecord
     public function commitValue($value, $modelId, $pk)
     {
         if($this->canSaveForModel($modelId, $pk)) {
-            $alreadyAvailable = true;
-            $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
-            if(!$meta) { // Create new meta if it doesn't exist
-                $alreadyAvailable = false;
+            if(!$this->hasMultipleAnswers()){
+                return $this->saveOneAnswer($value, $modelId, $pk);
+            }
+            else{
+                return $this->saveMultipleAnswers($value, $modelId, $pk);
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Save one answer
+     * @param string $value
+     * @param int $modelId
+     * @param int $pk
+     * @return boolean
+     */
+    protected function saveOneAnswer($value, $modelId, $pk)
+    {
+        $alreadyAvailable = true;
+        $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
+        if (!$meta) { // Create new meta if it doesn't exist
+            if(!$value){ // No need to save new meta if answer is empty
+                return false;
+            }
+            $alreadyAvailable = false;
+            $meta = new Meta();
+            $meta->fieldId = $this->id;
+            $meta->modelId = $modelId;
+            $meta->pk = $pk;
+        }
+        $meta->value = $value;
+        return $meta->save(false);
+    }    
+    
+    /**
+     * Save multiple answers
+     * @param mixed $value
+     * @param int $modelId
+     * @param int $pk
+     * @return boolean
+     */
+    public function saveMultipleAnswers($value, $modelId, $pk)
+    {
+        Meta::deleteAll(['modelId' => $modelId, 'pk' => $pk, 'fieldId' => $this->id]);
+        $allSaved = true;
+        if($value){
+            $value = is_array($value) ? $value : [$value];
+            foreach($value as $v){
                 $meta = new Meta();
                 $meta->fieldId = $this->id;
                 $meta->modelId = $modelId;
                 $meta->pk = $pk;
-            }
-            $this->value = $value;
-            if($this->validateInput()) {
-                $meta->value = $this->getInputValue();
-                if(!$alreadyAvailable && !$meta->value){ // No need to create new meta if value is empty
-                    return false;
+                $meta->value = $v;
+                if(!$meta->save(false)){
+                    $allSaved = false;
                 }
-                return $meta->save(false);
             }
         }
-        return false;
+        return $allSaved;
     }
 
     /**
