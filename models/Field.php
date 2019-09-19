@@ -44,9 +44,9 @@ class Field extends ActiveRecord
     {
         return [
             [['name', 'type'], 'required'],
-            [['active'], 'integer'],
-            [['name', 'type'], 'string', 'max' => 255],
-            [['additionalData'], 'string'],
+            [['isRequired', 'ordering'], 'integer'],
+            [['name', 'type', 'label', 'hint'], 'string', 'max' => 255],
+            [['additionalData', 'list'], 'string'],
         ];
     }
 
