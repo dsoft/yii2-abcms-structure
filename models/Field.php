@@ -14,7 +14,11 @@ use yii\base\DynamicModel;
  * @property integer $structureId
  * @property string $name
  * @property string $type
+ * @property string $label
+ * @property string $hint
  * @property integer $isRequired
+ * @property string $list list of items used in drop down and checkbox, separated by a line break
+ * @property string $additonalData JSON encoded data
  * @property integer $ordering
  */
 class Field extends ActiveRecord
@@ -42,6 +46,7 @@ class Field extends ActiveRecord
             [['name', 'type'], 'required'],
             [['active'], 'integer'],
             [['name', 'type'], 'string', 'max' => 255],
+            [['additionalData'], 'string'],
         ];
     }
 
@@ -54,8 +59,12 @@ class Field extends ActiveRecord
             'id' => 'ID',
             'structureId' => 'Structure',
             'name' => 'Name',
+            'label' => 'Label',
+            'hint' => 'Hint',
             'type' => 'Type',
             'isRequired' => 'Is Required',
+            'list' => 'List',
+            'additionalData' => 'Additional Data',
             'ordering' => 'Ordering',
         ];
     }
@@ -83,14 +92,20 @@ class Field extends ActiveRecord
     {
         if(!$this->_inputObject) {
             $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
-            $inputName = "field[$this->id]";
-            $label = Inflector::camel2words($this->name);
+            $inputName = $this->name;
+            $label = $this->label ? $this->label : Inflector::camel2words($this->name);
             $value = $this->value;
+            $hint = $this->hint;
+            $list = ($this->list) ? preg_split("/\\r\\n|\\r|\\n/", $this->list) : [];
+            $additionalData = json_decode($this->additionalData, true);
             $field = Yii::createObject([
                         'class' => $class,
                         'inputName' => $inputName,
                         'label' => $label,
+                        'hint' => $hint,
+                        'list' => $list,
                         'value' => $value,
+                        'additionalData' => $additionalData,
             ]);
             $this->_inputObject = $field;
         }

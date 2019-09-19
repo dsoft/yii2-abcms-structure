@@ -88,6 +88,31 @@ class Structure extends ActiveRecord
             }
         }
     }
+    
+    /**
+     * Read custom fields values and save them for a certain model.
+     * @param int $structureId
+     * @param int $modelId Model class identifier
+     * @param int $pk Primary key of the model
+     * @param array $data Array where key is the field name and value is the field value.
+     */
+    public static function saveValuesByName($structureId, $modelId, $pk, $data)
+    {
+        if(!is_array($data) || !$data) {
+            return;
+        }
+        $structure = Structure::findOne(['id' => $structureId]);
+        if(!$structure){
+            return false;
+        }
+        foreach($data as $name => $value) {
+            $field = Field::find()->with('structure')->andWhere(['structureId' => $structure->id, 'name' => $name])->one();
+            if($field) {
+                $field->commitValue($value, $modelId, $pk);
+            }
+        }
+        return true;
+    }
 
     /**
      * Fill value for each field.
