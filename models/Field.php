@@ -210,6 +210,17 @@ class Field extends ActiveRecord
     {
         return $this->isRequired;
     }
+    
+    /**
+     * Set value for this class and input object
+     * @param mixed $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+        $input = $this->getInputObject();
+        $input->value = $value;
+    }
 
     /**
      * Check if model is allowed to use this field
@@ -313,11 +324,19 @@ class Field extends ActiveRecord
      */
     public function fillValue($modelId, $pk)
     {
-        $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
-        if($meta) {
-            $this->value = $meta->value;
+        if($this->hasMultipleAnswers()){
+            $values = Meta::find()->select('value')->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->column();
+            $this->setValue($values);
             return true;
         }
+        else{
+            $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
+            if($meta) {
+                $this->setValue($meta->value);
+                return true;
+            }
+        }
+        
         return false;
     }
     
