@@ -121,6 +121,16 @@ class Field extends ActiveRecord
         $input = $this->getInputObject();
         return $input->renderField();
     }
+    
+    /**
+     * Return the formatted value
+     * Used to display the field value in the Detail View Widget
+     */
+    public function renderValue()
+    {
+        $input = $this->getInputObject();
+        return $input->renderValue();
+    }
 
     /**
      * Returns the active field
