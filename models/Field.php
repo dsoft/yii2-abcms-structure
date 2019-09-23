@@ -276,7 +276,7 @@ class Field extends ActiveRecord
         $alreadyAvailable = true;
         $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
         if (!$meta) { // Create new meta if it doesn't exist
-            if(!$value){ // No need to save new meta if answer is empty
+            if($value === ''){ // No need to save new meta if answer is empty
                 return false;
             }
             $alreadyAvailable = false;
