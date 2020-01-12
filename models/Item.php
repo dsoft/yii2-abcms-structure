@@ -81,8 +81,32 @@ class Item extends \abcms\library\base\BackendActiveRecord
         return $this->getCustomField($field, $structure->name);
     }
     
-    public function getFieldDisplayInGridView()
+    /**
+     * Find all items for a certain structure
+     * @param string $structureName
+     * @return Item[]
+     */
+    public static function findByStructure($structureName)
     {
-        
+        $query = Item::find()->andWhere(['active' =>1 ])->orderBy(['ordering' => SORT_ASC]);
+        $query->join('INNER JOIN', 'structure', 'structure.id = structure_item.structureId');
+        $query->andWhere(['structure.name' => $structureName]);
+        $models = $query->all();
+        return $models;
+    }
+    
+    /**
+     * Find one item for a certain structure
+     * @param string $structureName
+     * @param integr $id
+     * @return Item
+     */
+    public static function findOneByStructure($structureName, $id)
+    {
+        $query = Item::find()->andWhere(['active' =>1 ]);
+        $query->join('INNER JOIN', 'structure', 'structure.id = structure_item.structureId');
+        $query->andWhere(['structure.name' => $structureName, 'structure_item.id' => $id]);
+        $models = $query->one();
+        return $models;
     }
 }

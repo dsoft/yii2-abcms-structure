@@ -27,6 +27,17 @@ class CustomFieldsBehavior extends \yii\base\Behavior
         $pk = $model->id;
         Structure::saveFieldsMeta($modelId, $pk, Yii::$app->request->post('field'));
     }
+    
+    /**
+     * Saves structure data
+     */
+    public function saveStructureData($structureId, $data)
+    {
+        $model = $this->owner;
+        $modelId = $this->returnModelId();
+        $pk = $model->id;
+        Structure::saveValuesByName($structureId, $modelId, $pk, $data);
+    }
 
     /**
      * id of the owner model in the model table

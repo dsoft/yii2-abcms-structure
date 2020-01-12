@@ -92,20 +92,18 @@ class Field extends ActiveRecord
     {
         if(!$this->_inputObject) {
             $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
-            $inputName = $this->name;
             $label = $this->label ? $this->label : Inflector::camel2words($this->name);
-            $value = $this->value;
-            $hint = $this->hint;
             $list = ($this->list) ? preg_split("/\\r\\n|\\r|\\n/", $this->list) : [];
             $additionalData = json_decode($this->additionalData, true);
             $field = Yii::createObject([
                         'class' => $class,
-                        'inputName' => $inputName,
+                        'inputName' => $this->name,
                         'label' => $label,
-                        'hint' => $hint,
+                        'hint' => $this->hint,
                         'list' => $list,
-                        'value' => $value,
+                        'value' => $this->value,
                         'additionalData' => $additionalData,
+                        'isRequired' => $this->isRequired(),
             ]);
             $this->_inputObject = $field;
         }
@@ -273,13 +271,11 @@ class Field extends ActiveRecord
      */
     protected function saveOneAnswer($value, $modelId, $pk)
     {
-        $alreadyAvailable = true;
         $meta = Meta::find()->andWhere(['fieldId' => $this->id, 'modelId' => $modelId, 'pk' => $pk])->one();
         if (!$meta) { // Create new meta if it doesn't exist
             if($value === ''){ // No need to save new meta if answer is empty
                 return false;
             }
-            $alreadyAvailable = false;
             $meta = new Meta();
             $meta->fieldId = $this->id;
             $meta->modelId = $modelId;
@@ -352,7 +348,12 @@ class Field extends ActiveRecord
         $safeAttributes = [];
         foreach($fields as $field)
         {
-            $attributesNames[] = $field->name;
+            if($field->value){
+                $attributesNames[$field->name] = $field->value;
+            }
+            else{
+                $attributesNames[] = $field->name;
+            }
             if($field->isSafe()){
                 $safeAttributes[] = $field->name;
                 if($field->isRequired()){

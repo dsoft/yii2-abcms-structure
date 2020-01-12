@@ -4,6 +4,7 @@ namespace abcms\structure\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "structure".
@@ -160,6 +161,25 @@ class Structure extends ActiveRecord
         $fields = $this->fields;
         $model = Field::getDynamicModel($fields);
         return $model;
+    }
+    
+    /**
+     * Return plural name from name attribute
+     * @return string
+     */
+    public function getPluralName()
+    {
+        $name = Inflector::pluralize(Inflector::camel2words($this->name));
+        return $name;
+    }
+    
+    /**
+     * Return singular name from name attribute
+     * @return string
+     */
+    public function getSingularName()
+    {
+        return Inflector::camel2words($this->name);
     }
 
 }
