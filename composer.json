@@ -10,7 +10,7 @@
     },
     "require": {
         "yiisoft/yii2": "*",
-        "abcms/yii2-library": "*"
+        "abcms/yii2-library": "dev-master"
     },
     "suggest": {
     },
