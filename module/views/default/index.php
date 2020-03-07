@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use abcms\library\models\Model;
 
 /* @var $this yii\web\View */
 /* @var $searchModel abcms\structure\module\models\StructureSearch */
@@ -26,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'name',
-            'modelId',
+            [
+                'attribute' => 'modelId',
+                'value' => function($data){
+                    return $data->modelName;
+                },
+                'filter' => Model::getList(),
+            ],
             'pk',
             ['class' => 'yii\grid\ActionColumn'],
         ],

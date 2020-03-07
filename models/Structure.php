@@ -5,6 +5,7 @@ namespace abcms\structure\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Inflector;
+use abcms\library\models\Model;
 
 /**
  * This is the model class for table "structure".
@@ -34,6 +35,7 @@ class Structure extends ActiveRecord
             [['modelId', 'pk'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique'],
+            ['name', 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 'message' => '{attribute} should only contain alphanumeric characters and start with an alphabetic character.']
         ];
     }
 
@@ -45,7 +47,7 @@ class Structure extends ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'modelId' => 'Model ID',
+            'modelId' => 'Model',
             'pk' => 'PK',
         ];
     }
@@ -69,6 +71,24 @@ class Structure extends ActiveRecord
     public function getFields()
     {
         return $this->hasMany(Field::className(), ['structureId' => 'id'])->orderBy(['ordering' => SORT_ASC]);
+    }
+    
+    /**
+     * Model relation.
+     * @return mixed
+     */
+    public function getModel()
+    {
+        return $this->hasOne(Model::className(), ['id' => 'modelId']);
+    }
+    
+    /**
+     * Return the class name of the model
+     * @return string|null
+     */
+    public function getModelName()
+    {
+        return $this->model ? $this->model->className : null;
     }
 
     /**
