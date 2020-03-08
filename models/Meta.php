@@ -42,11 +42,10 @@ class Meta extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'fieldId' => 'Field ID',
-            'modelId' => 'Model ID',
-            'pk' => 'PK',
-            'value' => 'Value',
+            'fieldId' => Yii::t('abcms.structure', 'Field'),
+            'modelId' => Yii::t('abcms.structure', 'Model'),
+            'pk' => Yii::t('abcms.structure', 'PK'),
+            'value' => Yii::t('abcms.structure', 'Value'),
         ];
     }
     

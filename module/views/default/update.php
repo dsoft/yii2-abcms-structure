@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model abcms\structure\models\Structure */
 
-$this->title = 'Update Structure: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Structures', 'url' => ['index']];
+$this->title = Yii::t('abcms.structure', 'Update Structure').': ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('abcms.structure', 'Structures'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = Yii::t('abcms.structure', 'Update');
 ?>
 <div class="structure-update">
 

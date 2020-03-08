@@ -56,16 +56,15 @@ class Field extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'structureId' => 'Structure',
-            'name' => 'Name',
-            'label' => 'Label',
-            'hint' => 'Hint',
-            'type' => 'Type',
-            'isRequired' => 'Is Required',
-            'list' => 'List',
-            'additionalData' => 'Additional Data',
-            'ordering' => 'Ordering',
+            'structureId' => Yii::t('abcms.structure', 'Structure'),
+            'name' => Yii::t('abcms.structure', 'Name'),
+            'label' => Yii::t('abcms.structure', 'Label'),
+            'hint' => Yii::t('abcms.structure', 'Hint'),
+            'type' => Yii::t('abcms.structure', 'Type'),
+            'isRequired' => Yii::t('abcms.structure', 'Is Required'),
+            'list' => Yii::t('abcms.structure', 'List'),
+            'additionalData' => Yii::t('abcms.structure', 'Additional Data'),
+            'ordering' => Yii::t('abcms.structure', 'Ordering'),
         ];
     }
 
@@ -364,7 +363,7 @@ class Field extends ActiveRecord
         $model = new DynamicModel($attributesNames);
         $model->addRule($safeAttributes, 'safe');
         if($requiredAttributes){
-            $model->addRule($requiredAttributes, 'required', ['message' => Yii::t('app', 'This field cannot be left empty')]);
+            $model->addRule($requiredAttributes, 'required', ['message' => Yii::t('abcms.structure', 'This field cannot be left empty')]);
         }
         foreach($fields as $field){
             $field->addRulesToModel($model);

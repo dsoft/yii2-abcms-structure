@@ -35,7 +35,7 @@ class Structure extends ActiveRecord
             [['modelId', 'pk'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique'],
-            ['name', 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 'message' => '{attribute} should only contain alphanumeric characters and start with an alphabetic character.']
+            ['name', 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 'message' => Yii::t('abcms.structure', '{attribute} should only contain alphanumeric characters and start with an alphabetic character.')]
         ];
     }
 
@@ -45,10 +45,9 @@ class Structure extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'modelId' => 'Model',
-            'pk' => 'PK',
+            'name' => Yii::t('abcms.structure', 'Name'),
+            'modelId' => Yii::t('abcms.structure', 'Model'),
+            'pk' => Yii::t('abcms.structure', 'PK'),
         ];
     }
     

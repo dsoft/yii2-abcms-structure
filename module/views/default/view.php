@@ -8,7 +8,7 @@ use yii\grid\GridView;
 /* @var $model abcms\structure\models\Structure */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Structures', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('abcms.structure', 'Structures'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="structure-view">
@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('abcms.structure', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <p>
-        <?= Html::a('Add Field', ['field/create', 'structureId' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('abcms.structure', 'Add Field'), ['field/create', 'structureId' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
     
     <?=

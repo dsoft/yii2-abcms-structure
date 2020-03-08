@@ -8,7 +8,7 @@ use abcms\library\models\Model;
 /* @var $searchModel abcms\structure\module\models\StructureSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Structures';
+$this->title = Yii::t('abcms.structure', 'Structures');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="structure-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Structure', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('abcms.structure', 'Create Structure'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?=
     GridView::widget([
