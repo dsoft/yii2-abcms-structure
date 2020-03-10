@@ -47,6 +47,8 @@ class Field extends ActiveRecord
             [['isRequired', 'ordering'], 'integer'],
             [['name', 'type', 'label', 'hint'], 'string', 'max' => 255],
             [['additionalData', 'list'], 'string'],
+            ['name', 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 'message' => Yii::t('abcms.structure', '{attribute} should only contain alphanumeric characters and start with an alphabetic character.')],
+            ['name', 'unique', 'filter' => ['structureId' => $this->structureId]],
         ];
     }
 
@@ -369,6 +371,28 @@ class Field extends ActiveRecord
             $field->addRulesToModel($model);
         }
         return $model;
+    }
+    
+    /**
+     * Returns an array containing the available fields types
+     * @return array
+     */
+    public static function getTypeList()
+    {
+        $array = [
+            'drop-down' => Yii::t('abcms.structure', 'Drop Down List'),
+            'file' => Yii::t('abcms.structure', 'File'),
+            'image' => Yii::t('abcms.structure', 'Image'),
+            'integer' => Yii::t('abcms.structure', 'Integer'),
+            'multiple-choice-select' => Yii::t('abcms.structure', 'Multiple Choice Select'),
+            'pdf' => Yii::t('abcms.structure', 'Pdf'),
+            'text' => Yii::t('abcms.structure', 'Text'),
+            'text-area' => Yii::t('abcms.structure', 'Text Area'),
+            'text-editor' => Yii::t('abcms.structure', 'Text Editor'),
+            'url' => Yii::t('abcms.structure', 'Url'),
+            'video' => Yii::t('abcms.structure', 'Video'),
+        ];
+        return $array;
     }
 
 }

@@ -18,8 +18,8 @@ class FieldSearch extends Field
     public function rules()
     {
         return [
-            [['id', 'structureId', 'ordering'], 'integer'],
-            [['name', 'type'], 'safe'],
+            [['id', 'structureId', 'ordering', 'isRequired'], 'integer'],
+            [['name', 'type', 'label'], 'safe'],
         ];
     }
 
@@ -68,10 +68,12 @@ class FieldSearch extends Field
             'id' => $this->id,
             'structureId' => $structureId,
             'ordering' => $this->ordering,
+            'isRequired' => $this->isRequired,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'type', $this->type]);
+            ->andFilterWhere(['like', 'type', $this->type])
+            ->andFilterWhere(['like', 'label', $this->label]);
 
         return $dataProvider;
     }

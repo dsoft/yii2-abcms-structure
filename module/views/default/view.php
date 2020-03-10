@@ -52,6 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'type',
+            'label',
+            'isRequired:boolean',
             'ordering',
             ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}', 'controller' => 'field'],
         ],

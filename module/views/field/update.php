@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Update Field: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Structures', 'url' => ['default/index']];
 $this->params['breadcrumbs'][] = ['label' => $structure->name, 'url' => ['default/view', 'id' => $structure->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Update Field';
 ?>
 <div class="field-update">
 
