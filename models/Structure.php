@@ -200,5 +200,19 @@ class Structure extends ActiveRecord
     {
         return Inflector::camel2words($this->name);
     }
+    
+    /**
+     * Return all models as array where id is the key, and name or id as value.
+     * @return array
+     */
+    public static function getList()
+    {
+        $models = self::find()->orderBy(['name' => SORT_ASC, 'id' => SORT_ASC])->all();
+        $array = [];
+        foreach($models as $model){
+            $array[$model->id] = $model->name ? $model->name : 'Structure #' . $model->id;
+        }
+        return $array;
+    }
 
 }

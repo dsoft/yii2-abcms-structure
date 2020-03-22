@@ -30,6 +30,9 @@ class FieldController extends AdminController
         $model->loadDefaultValues();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Yii::$app->request->get('returnUrl')) {
+                return $this->redirect(Yii::$app->request->get('returnUrl'));
+            }
             return $this->redirect(['default/view', 'id' => $structure->id]);
         } else {
             return $this->render('create', [
@@ -51,6 +54,9 @@ class FieldController extends AdminController
         $structure = $model->structure;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Yii::$app->request->get('returnUrl')) {
+                return $this->redirect(Yii::$app->request->get('returnUrl'));
+            }
             return $this->redirect(['default/view', 'id' => $structure->id]);
         } else {
             return $this->render('update', [
@@ -72,6 +78,9 @@ class FieldController extends AdminController
         $structureId = $model->structureId;
         $model->delete();
 
+        if (Yii::$app->request->get('returnUrl')) {
+            return $this->redirect(Yii::$app->request->get('returnUrl'));
+        }
         return $this->redirect(['default/view', 'id' => $structureId]);
     }
     
