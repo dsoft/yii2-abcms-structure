@@ -17,6 +17,7 @@ use yii\base\DynamicModel;
  * @property string $label
  * @property string $hint
  * @property integer $isRequired
+ * @property integer $isTranslatable
  * @property string $list list of items used in drop down and checkbox, separated by a line break
  * @property string $additonalData JSON encoded data
  * @property integer $ordering
@@ -44,7 +45,7 @@ class Field extends ActiveRecord
     {
         return [
             [['name', 'type'], 'required'],
-            [['isRequired', 'ordering'], 'integer'],
+            [['isRequired', 'ordering', 'isTranslatable'], 'integer'],
             [['name', 'type', 'label', 'hint'], 'string', 'max' => 255],
             [['additionalData', 'list'], 'string'],
             ['name', 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 'message' => Yii::t('abcms.structure', '{attribute} should only contain alphanumeric characters and start with an alphabetic character.')],
@@ -64,6 +65,7 @@ class Field extends ActiveRecord
             'hint' => Yii::t('abcms.structure', 'Hint'),
             'type' => Yii::t('abcms.structure', 'Type'),
             'isRequired' => Yii::t('abcms.structure', 'Is Required'),
+            'isTranslatable' => Yii::t('abcms.structure', 'Is Translatable'),
             'list' => Yii::t('abcms.structure', 'List'),
             'additionalData' => Yii::t('abcms.structure', 'Additional Data'),
             'ordering' => Yii::t('abcms.structure', 'Ordering'),

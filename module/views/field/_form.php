@@ -23,6 +23,8 @@ use abcms\structure\models\Field;
     
     <?= $form->field($model, 'isRequired')->checkbox() ?>
     
+    <?= $form->field($model, 'isTranslatable')->checkbox() ?>
+    
     <?= $form->field($model, 'list')->textarea(['rows' => 6])->hint(Yii::t('abcms.structure', 'Used for drop-down lists, write each option on one line.')) ?>
     
     <?= $form->field($model, 'additionalData')->textarea(['rows' => 6])->hint(Yii::t('abcms.structure', 'JSON format.')); ?>

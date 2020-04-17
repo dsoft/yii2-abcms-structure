@@ -18,7 +18,7 @@ class FieldSearch extends Field
     public function rules()
     {
         return [
-            [['id', 'structureId', 'ordering', 'isRequired'], 'integer'],
+            [['id', 'structureId', 'ordering', 'isRequired', 'isTranslatable'], 'integer'],
             [['name', 'type', 'label'], 'safe'],
         ];
     }
@@ -69,6 +69,7 @@ class FieldSearch extends Field
             'structureId' => $structureId,
             'ordering' => $this->ordering,
             'isRequired' => $this->isRequired,
+            'isTranslatable' => $this->isTranslatable,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
