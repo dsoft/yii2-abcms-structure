@@ -12,11 +12,13 @@ use Yii;
  * @property integer $modelId
  * @property integer $pk
  * @property string $value
+ * 
+ * @property Field $field
  */
 class Meta extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -24,7 +26,7 @@ class Meta extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
@@ -34,10 +36,25 @@ class Meta extends \yii\db\ActiveRecord
             [['value'], 'string'],
         ];
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => \abcms\multilanguage\behaviors\ModelBehavior::className(),
+                'attributes' => [
+                    'value',
+                ],
+            ],
+        ]);
+    }
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
@@ -50,11 +67,22 @@ class Meta extends \yii\db\ActiveRecord
     }
     
     /**
-     * Get Field model that this field belongs to
-     * @return mixed
+     * Field relation
+     * @return \yii\db\ActiveQuery
      */
     public function getField()
     {
         return $this->hasOne(Field::className(), ['id' => 'fieldId']);
+    }
+    
+    /**
+     * Overwrite ModelBehavior::getTranslationInputName() to read attribute from field
+     * @param string $attribute
+     * @param string $language
+     * @return string
+     */
+    public function getTranslationInputName($attribute, $language)
+    {
+        return $this->field->name.'_'.$language;
     }
 }

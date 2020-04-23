@@ -91,7 +91,7 @@ class Field extends ActiveRecord
      * @param ActiveRecord $model
      * @return \abcms\library\fields\Field
      */
-    protected function getInputObject()
+    public function getInputObject()
     {
         if(!$this->_inputObject) {
             $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);

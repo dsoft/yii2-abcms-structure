@@ -6,6 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\Inflector;
 use abcms\library\models\Model;
+use abcms\structure\classes\StructureTranslation;
 
 /**
  * This is the model class for table "structure".
@@ -14,6 +15,9 @@ use abcms\library\models\Model;
  * @property string $name
  * @property integer $modelId
  * @property integer $pk
+ * 
+ * @property Field[] $fields
+ * @property Field[] $translatableFields
  */
 class Structure extends ActiveRecord
 {
@@ -65,11 +69,20 @@ class Structure extends ActiveRecord
 
     /**
      * Get Fields models that belongs to this model
-     * @return mixed
+     * @return \yii\db\ActiveQuery
      */
     public function getFields()
     {
         return $this->hasMany(Field::className(), ['structureId' => 'id'])->orderBy(['ordering' => SORT_ASC]);
+    }
+    
+    /**
+     * Get translatable Fields models that belongs to this model
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTranslatableFields()
+    {
+        return $this->hasMany(Field::className(), ['structureId' => 'id'])->andWhere(['isTranslatable' => 1])->orderBy(['ordering' => SORT_ASC]);
     }
     
     /**
@@ -171,15 +184,20 @@ class Structure extends ActiveRecord
         return $array;
     }
     
+    protected $_dynamicModel;
+    
     /**
      * Creates a dynamic model for this structure fields.
      * @return \yii\base\DynamicModel
      */
     public function getDynamicModel()
     {
-        $fields = $this->fields;
-        $model = Field::getDynamicModel($fields);
-        return $model;
+        if(!$this->_dynamicModel){
+            $fields = $this->fields;
+            $this->_dynamicModel = Field::getDynamicModel($fields);
+            $this->_dynamicModel->defineAttribute('isLoaded', false);
+        }
+        return $this->_dynamicModel;
     }
     
     /**
@@ -213,6 +231,19 @@ class Structure extends ActiveRecord
             $array[$model->id] = $model->name ? $model->name : 'Structure #' . $model->id;
         }
         return $array;
+    }
+    
+    /**
+     * Return the StructureTranslation class of this Structure for a certain model
+     * @param ActiveRecord $model
+     * @return StructureTranslation
+     */
+    public function getStructureTranslation($model)
+    {
+        $structureTranslation = new StructureTranslation();
+        $structureTranslation->structure = $this;
+        $structureTranslation->model = $model;
+        return $structureTranslation;
     }
 
 }
