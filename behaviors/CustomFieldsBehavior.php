@@ -12,6 +12,11 @@ class CustomFieldsBehavior extends \yii\base\Behavior
 {
 
     /**
+     * @var string the Multilanguage application component ID.
+     */
+    public $multilanguageId = 'multilanguage';
+    
+    /**
      * @inheritdoc
      */
     public function init()
@@ -185,34 +190,37 @@ class CustomFieldsBehavior extends \yii\base\Behavior
     }
     
     /**
-     * @var array|null
+     * @var array key is the language and value is the custom fields for this language
      */
-    private $_customFields = null;
+    private $_customFields = [];
     
     /**
      * Get custom fields of the owner 
+     * @param string|null $language
      * @return array
      */
-    public function getCustomFields()
+    public function getCustomFields($language = null)
     {
-        if($this->_customFields === null){
+        $customFieldsLanguage = $language ? $language : Yii::$app->sourceLanguage; 
+        if(!isset($this->_customFields[$customFieldsLanguage])){
             $model = $this->owner;
             $modelId = $this->returnModelId();
             $pk = $model->id;
-            $this->_customFields = Structure::getCustomFields($modelId, $pk);
+            $this->_customFields[$customFieldsLanguage] = Structure::getCustomFields($modelId, $pk, $language, $this->multilanguageId);
         }
-        return $this->_customFields;
+        return $this->_customFields[$customFieldsLanguage];
     }
     
     /**
      * Return a specific custom field
      * @param string $field
      * @param string|null $structureName Use it if you want to get the custom field from a certain structure
+     * @param string|null $language
      * @return string|null
      */
-    public function getCustomField($field, $structureName = null)
+    public function getCustomField($field, $structureName = null, $language = null)
     {
-        $fields = $this->getCustomFields();
+        $fields = $this->getCustomFields($language);
         if($structureName){
             return isset($fields[$structureName][$field]) ? $fields[$structureName][$field] : null;
         }

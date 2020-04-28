@@ -164,11 +164,18 @@ class Structure extends ActiveRecord
      * Returns custom fields for a certain model
      * @param int $modelId Model class identifier
      * @param int $pk Primary key of the model
+     * @param string|null $language Language
+     * @param string $multilanguage Multi-language component ID
      * @return array
      */
-    public static function getCustomFields($modelId, $pk)
+    public static function getCustomFields($modelId, $pk, $language = null, $multilanguage = 'multilanguage')
     {
         $metas = Meta::find()->joinWith(['field', 'field.structure'], true, 'INNER JOIN')->andWhere(['structure_field_meta.modelId' => $modelId, 'structure_field_meta.pk' => $pk])->all();
+        if($language)
+        {
+            $multilanguage = Yii::$app->get($multilanguage);
+            $metas = $multilanguage->translateMultiple($metas, $language, FALSE);
+        }
         $array = [];
         foreach($metas as $meta){
             if($meta->value){
