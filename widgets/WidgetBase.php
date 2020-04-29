@@ -26,6 +26,11 @@ class WidgetBase extends Widget
      * @var string|null The header title of the widget
      */
     public $title = null;
+    
+    /**
+     * @var string
+     */
+    public $titleTag = 'h2';
 
     /**
      * @inheritdoc

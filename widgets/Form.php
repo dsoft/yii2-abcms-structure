@@ -40,6 +40,7 @@ class Form extends WidgetBase
         if($fields) {
             return $this->render('form', [
                 'title' => $this->title,
+                'titleTag' => $this->titleTag,
                 'fields' => $fields,
                 'model' => $this->model,
                 'dynamicModel' => $dynamicModel,

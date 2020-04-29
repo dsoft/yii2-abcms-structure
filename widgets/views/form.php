@@ -6,8 +6,8 @@
 /* @var $dynamicModel yii\base\DynamicModel */
 ?>
 
-<?php if($title): ?>
-    <h2><?= $title ?></h2>
+<?php if($title && $titleTag): ?>
+    <<?= $titleTag ?>><?= $title ?></<?= $titleTag ?>>
 <?php endif; ?>
 
 <?php foreach($fields as $field): ?>

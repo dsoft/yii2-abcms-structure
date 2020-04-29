@@ -33,6 +33,7 @@ class View extends WidgetBase
             return $this->render('view', [
                         'attributes' => $attributes,
                         'title' => $this->title,
+                        'titleTag' => $this->titleTag,
             ]);
         }
     }
