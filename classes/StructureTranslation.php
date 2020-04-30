@@ -78,7 +78,7 @@ class StructureTranslation implements \abcms\multilanguage\behaviors\Multilangua
      */
     protected function getTranslationInputName($attribute, $language)
     {
-        return $attribute.'_'.$language;
+        return $attribute.'_'.str_replace('-', '_', $language);
     }
     
     protected $_translationModel;

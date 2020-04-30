@@ -83,6 +83,6 @@ class Meta extends \yii\db\ActiveRecord
      */
     public function getTranslationInputName($attribute, $language)
     {
-        return $this->field->name.'_'.$language;
+        return $this->field->name.'_'.str_replace('-', '_', $language);
     }
 }
