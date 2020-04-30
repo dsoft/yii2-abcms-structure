@@ -146,17 +146,6 @@ class CustomFieldsBehavior extends \yii\base\Behavior
         }
         $this->autoStructuresTranslation = $structuresTranslations;
     }
-
-    /**
-     * Saves custom fields of the owner from POST
-     */
-    public function saveCustomFields()
-    {
-        $model = $this->owner;
-        $modelId = $this->returnModelId();
-        $pk = $model->id;
-        Structure::saveFieldsMeta($modelId, $pk, Yii::$app->request->post('field'));
-    }
     
     /**
      * Saves structure data

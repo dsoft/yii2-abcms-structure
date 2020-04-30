@@ -102,25 +102,6 @@ class Structure extends ActiveRecord
     {
         return $this->model ? $this->model->className : null;
     }
-
-    /**
-     * Read custom fields from POST and save them for a certain model.
-     * @param int $modelId Model class identifier
-     * @param int $pk Primary key of the model
-     * @param array $data Array where key is the field id and value is the field value.
-     */
-    public static function saveFieldsMeta($modelId, $pk, $data)
-    {
-        if(!is_array($data) || !$data) {
-            return;
-        }
-        foreach($data as $fieldId => $value) {
-            $field = Field::find()->with('structure')->andWhere(['id' => (int) $fieldId])->one();
-            if($field) {
-                $field->commitValue($value, $modelId, $pk);
-            }
-        }
-    }
     
     /**
      * Read custom fields values and save them for a certain model.

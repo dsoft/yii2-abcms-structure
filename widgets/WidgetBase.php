@@ -11,8 +11,8 @@ class WidgetBase extends Widget
 {
 
     /**
-     * Structure model or an array that can be used to find the structure model.
-     * @var Structure|array 
+     * Structure model.
+     * @var Structure
      */
     public $structure;
 
@@ -40,14 +40,10 @@ class WidgetBase extends Widget
         if(!$this->model) {
             throw new InvalidConfigException('"model" property must be set.');
         }
-        if(!($this->structure && (is_array($this->structure) || get_class($this->structure) == Structure::className()))) {
-            throw new InvalidConfigException('"structure" property should be an array or a Structure model.');
+        if(!($this->structure && get_class($this->structure) == Structure::className())) {
+            throw new InvalidConfigException('"structure" property should be a Structure model.');
         }
-        if(is_array($this->structure)) {
-            $structure = Structure::findOne($this->structure);
-            $this->structure = $structure ? $structure : null;
-        }
-       if(!$this->model->hasMethod('returnModelId')) {
+        if(!$this->model->hasMethod('returnModelId')) {
             throw new InvalidConfigException('"model" should implement the custom fields behavior: '.\abcms\structure\behaviors\CustomFieldsBehavior::className());
         }
         if($this->structure){
