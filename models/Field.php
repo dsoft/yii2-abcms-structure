@@ -94,7 +94,12 @@ class Field extends ActiveRecord
     public function getInputObject()
     {
         if(!$this->_inputObject) {
-            $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
+            if (strpos($this->type, '\\') !== false) {
+                $class = $this->type;
+            }
+            else{
+                $class = '\abcms\library\fields\\'.\yii\helpers\Inflector::id2camel($this->type);
+            }
             $label = $this->label ? $this->label : Inflector::camel2words($this->name);
             $list = ($this->list) ? preg_split("/\\r\\n|\\r|\\n/", $this->list) : [];
             $additionalData = json_decode($this->additionalData, true);
@@ -373,28 +378,6 @@ class Field extends ActiveRecord
             $field->addRulesToModel($model);
         }
         return $model;
-    }
-    
-    /**
-     * Returns an array containing the available fields types
-     * @return array
-     */
-    public static function getTypeList()
-    {
-        $array = [
-            'drop-down' => Yii::t('abcms.structure', 'Drop Down List'),
-            'file' => Yii::t('abcms.structure', 'File'),
-            'image' => Yii::t('abcms.structure', 'Image'),
-            'integer' => Yii::t('abcms.structure', 'Integer'),
-            'multiple-choice-select' => Yii::t('abcms.structure', 'Multiple Choice Select'),
-            'pdf' => Yii::t('abcms.structure', 'Pdf'),
-            'text' => Yii::t('abcms.structure', 'Text'),
-            'text-area' => Yii::t('abcms.structure', 'Text Area'),
-            'text-editor' => Yii::t('abcms.structure', 'Text Editor'),
-            'url' => Yii::t('abcms.structure', 'Url'),
-            'video' => Yii::t('abcms.structure', 'Video'),
-        ];
-        return $array;
     }
 
 }

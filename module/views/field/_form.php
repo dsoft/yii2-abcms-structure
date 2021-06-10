@@ -7,6 +7,8 @@ use abcms\structure\models\Field;
 /* @var $this yii\web\View */
 /* @var $model abcms\structure\models\Field */
 /* @var $form yii\widgets\ActiveForm */
+
+$fieldTypesClass = Yii::$app->controller->module->fieldTypesClass;
 ?>
 
 <div class="field-form">
@@ -15,7 +17,7 @@ use abcms\structure\models\Field;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'type')->dropDownList(Field::getTypeList()) ?>
+    <?= $form->field($model, 'type')->dropDownList($fieldTypesClass::getTypes()) ?>
     
     <?= $form->field($model, 'label')->textInput(['maxlength' => true]) ?>
     
